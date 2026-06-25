@@ -48,8 +48,8 @@ type
   TDObjectBaseProc = reference to procedure(const AItem: TObject);
   TDObjectMatchCallback = function(const AItem: TObject; const AContext: Pointer): Boolean;
 
-  { TDObjectListBase concentra os algoritmos que percorrem ou movimentam itens.
-    TDObjectList<T> fica como fachada para reduzir o volume de codigo }
+  {TDObjectListBase encapsulates the algorithms that traverse or move items.
+    TDObjectList<T> serves as a facade to reduce the amount of code. }
   TDObjectListBase = class(TDCustomListBase)
   private
     FItems: array of TObject;
@@ -99,9 +99,9 @@ type
     property OwnsObjects: Boolean read FOwnsObjects write FOwnsObjects;
   end;
 
-  { Estes callbacks preservam a API tipada. A implementacao generica apenas
-    adapta T para TObject e delega os loops para TDObjectListBase. Esses
-    adaptadores permanecem em TDObjectList<T> porque a API publica recebe
+  { These callbacks preserve the typed API. The generic implementation merely
+    adapts T to TObject and delegates the loops to TDObjectListBase. These
+    adapters remain in TDObjectList<T> because the public API accepts
     TDObjectPredicate<T>/TDObjectProc<T>;}
   TDObjectPredicate<T: class> = reference to function(const AItem: T): Boolean;
   TDObjectProc<T: class> = reference to procedure(const AItem: T);
@@ -117,11 +117,11 @@ type
     property Current: T read GetCurrent;
   end;
 
-  { O codigo que permanece em TDObjectList<T> existe apenas por contrato
-    tipado: retorno T, propriedade Items:T, for..in:T, array aberto de T e
-    callbacks TDObjectPredicate<T>/TDObjectProc<T>. Os wrappers de parametros
-    tipados sao mantidos por compatibilidade de fonte e delegam em uma linha
-    para a base; os loops e movimentacoes continuam nao genericos. }
+  { The code that remains in `TDObjectList<T>` exists solely to preserve the typed contract: `T` return values, the `Items: T` property, 
+  `for..in` iteration over `T`, open arrays of `T`, and `TDObjectPredicate<T>`/`TDObjectProc<T>` callbacks. 
+  The typed parameter wrappers are retained for source compatibility and delegate to the base implementation in a single line; 
+  the loops and data movement logic remain non-generic.
+ }
   TDObjectList<T: class> = class(TDObjectListBase)
   private
     function GetTypedItem(const AIndex: Integer): T; inline;
