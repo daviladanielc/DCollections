@@ -242,6 +242,30 @@ Customers[0].Name := 'Peter';
 Customers.Clear;
 ```
 
+## Benchmark
+
+A simple benchmark project is included in the **Benchmark** folder to demonstrate the impact of generic specialization on compilation time.
+
+### How to run
+
+1. Open the benchmark project in Delphi.
+2. Add **`uCommonClasses.pas`** to the project.
+3. Perform a **Build All** in **Release** mode.
+4. Record the total compilation time.
+5. Remove **`uCommonClasses.pas`** from the project.
+6. Add **`uNewClasses.pas`** instead.
+7. Perform another **Build All** in **Release** mode.
+8. Compare the compilation times.
+
+Both units contain the same number of classes and list declarations. The only difference is the collection implementation:
+
+- **`uCommonClasses`** uses `TObjectList<T>` from `System.Generics.Collections`.
+- **`uNewClasses`** uses `TDObjectList<T>` from DCollections.
+
+This benchmark highlights the reduction in generic code generation achieved by DCollections, which can significantly decrease compilation time and generated DCU size in projects with many generic specializations.
+
+> **Note:** For the most accurate results, close all other applications and execute the benchmark multiple times. Ignore the first build and compare the average of subsequent **Build All** executions in **Release** mode.
+
 ## Performance
 
 DCollections is not intended to outperform hand-written loops.
